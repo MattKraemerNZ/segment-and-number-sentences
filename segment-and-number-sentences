@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+IFS= read -r -d '' PYCODE <<HEREDOC
+import sys
+import spacy
+
+text = sys.stdin.read()
+
+nlp = spacy.load("en")
+
+doc = nlp(str(text))
+for span in doc.sents:
+    print(str(span))
+HEREDOC
+
+python3 <(cat <<<"$PYCODE") "$@" | cat -n
